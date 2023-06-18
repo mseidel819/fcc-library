@@ -18,7 +18,7 @@ module.exports = function (app) {
       try {
         const book = await Book.find().select({ comments: 0, __v: 0 });
 
-        res.json(book);
+        res.status(200).json(book);
       } catch (err) {
         res.json({ error: err.message });
       }
@@ -33,7 +33,8 @@ module.exports = function (app) {
           return res.send("missing required field title");
         }
         const newBook = await Book.create({ title });
-        res.json(newBook);
+
+        res.status(200).json(newBook);
       } catch (err) {
         res.json({ error: err.message });
       }
@@ -63,9 +64,11 @@ module.exports = function (app) {
 
         if (!book) {
           res.send("no book exists");
-        } else res.json(book);
+        } else res.status(200).json(book);
       } catch (err) {
-        res.json({ error: err.message });
+        if (err.kind === "ObjectId") {
+          return res.send("no book exists");
+        } else res.json({ error: err.message });
       }
     })
 
@@ -90,7 +93,9 @@ module.exports = function (app) {
           res.send("no book exists");
         } else res.json(book);
       } catch (err) {
-        res.json({ error: err.message });
+        if (err.kind === "ObjectId") {
+          return res.send("no book exists");
+        } else res.json({ error: err.message });
       }
     })
 
@@ -106,7 +111,9 @@ module.exports = function (app) {
           res.send("delete successful");
         }
       } catch (err) {
-        res.json({ error: err.message });
+        if (err.kind === "ObjectId") {
+          return res.send("no book exists");
+        } else res.json({ error: err.message });
       }
     });
 };
