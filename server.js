@@ -12,10 +12,7 @@ const mongoose = require("mongoose");
 const app = express();
 
 //connect to database
-const DB = process.env.DATABASE.replace(
-  "<PASSWORD>",
-  process.env.DATABASE_PASSWORD
-);
+const DB = process.env.DB.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
 
 mongoose
   .connect(DB, {
